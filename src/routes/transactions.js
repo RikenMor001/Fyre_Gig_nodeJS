@@ -1,30 +1,31 @@
-
-
 const express = require('express');
 const router = express.Router();
+const formatDate = new Date().toISOString();
 
 // GET/transactions
 router.get("/transactions", async (req, res) => {
     try {
         const body = req.body;
         res.json({
+            // success, data, timestamp, message
             success: true,
             data: body,
-            timestamp: new Date().toISOString(),
+            timestamp: formatDate,
             message: "transactions fetched successfuly"
         })
     } catch(error){
         res.status(500).json({
+            success: false,
             error: "Internal server error",
             message: error.message,
-            timestamp: new Date().toISOString()
+            timestamp: formatDate
         })
     }
 })
 
 // GET/transactions/:id
 router.get("transactions/:id", async(req, res) => {
-
+        
 })
 
 // POST /createTransaction
