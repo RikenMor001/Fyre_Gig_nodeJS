@@ -70,6 +70,76 @@ export class TransactionService {
             if (typeof valueOfA === "number" && typeof valueOfB === "number") { 
                 return order === "desc" ? valueOfA - valueOfB : valueOfB - valueOfA;
             }
+            return 0;
         })
+
+        // Pagination
+        if (filter.offset){
+            transactions = transactions.slice(filter.offset);     
+        }
+
+        if (filter.limit){
+            transactions = transactions.slice(0, filter.limit);
+        }
+
+        return transactions;
+    }
+
+    getTransactionById(id){
+        return this.transactions.get(id);
+    }
+
+    // creating transaction
+    createTransaction(transaction){
+        const transaction = {
+            ...transactionData,
+            createdAt: formatDate,
+            updatedAt: formatDate
+        }
+        this.transactions.set(transaction.id, transaction);
+        return transaction;
+    }
+
+    // updating transaction
+    updateTransaction(id, transaction){
+        const updateTransaction = this.transactions.get(id);
+
+        if (!updateTransaction){
+            return null;
+        }
+
+        const updatedTransaction = {
+            ...exisitingTransaction, // this is the existing transaction
+            ...updateData,  // here I am updating the existing transaction with the new data
+            date: formatDate 
+        }
+
+        this.transactions.set(id, updatedTransaction);
+        return updatedTransaction;
+    }
+
+    // deleting transaction
+    deleteTransaction(id){
+        this.transactions.delete(id);
+    }
+
+    // fetching transactions 
+
+    getTransactionsState(){
+        const transactionsValue = Array.from(this.transactions.values());
+        const credit = transactionsValue.filter(t => t.type === "credit");
+        const debit = transactionsValue.filter(t => t.type === "debit");
+
+        return {
+            total: transactionsValue.length,
+            credit: {
+                count: credit.length,
+                total: credit.reduce((acc, curr) => acc + curr.amount, 0)
+            },
+            debit: {
+                count: debit.length,
+                total: debit.reduce((acc, curr) => acc + curr.amount, 0)
+            }            
+        }
     }
 }
