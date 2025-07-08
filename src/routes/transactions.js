@@ -1,46 +1,51 @@
-const express = require('express');
-const router = express.Router();
-const formatDate = new Date().toISOString();
 
-// GET/transactions
+const express = require("express");
+const { TransactionService } = require("../services/transactionServices");
+const router = express.Router();
+const formateDate = new Date().toISOString();
+const transactionServices = new TransactionService();;
+
+// get transactions
 router.get("/transactions", async (req, res) => {
     try {
-        const body = req.body;
-        res.json({
-            // success, data, timestamp, message
-            success: true,
-            data: body,
-            timestamp: formatDate,
-            message: "transactions fetched successfuly"
+        const {type, category, sortBy, order, limit, offset } = req.query; 
+        const transactions = transactionServices.getAllTransactions({
+            type,
+            category, 
+            sortBy, 
+            order, 
+            limit: limit ? parseInt(limit) : undefined, 
+            offset: offset ? parseInt(offset) : undefined
         })
+
     } catch(error){
         res.status(500).json({
             success: false,
-            error: "Internal server error",
-            message: error.message,
-            timestamp: formatDate
+            error: error.emssage + "Error fetching transactions",
+            timeStamp: formateDate,
         })
     }
 })
 
-// GET/transactions/:id
-router.get("transactions/:id", async(req, res) => {
-        
+// get transactions by id
+router.get("/transactions/:id", async (req, res) => {
+    
 })
 
-// POST /createTransaction
-router.post("createTransactions", async (req, res) => {
-
+// create transactions
+router.post("/createTransactions", async (req, res) => { 
+    
 })
 
-// PUT /updateTransaction
-router.put("updateTransaction", async (req, res) => {
-
-})
-
-// DELETE /deleteTransaction
-router.delete("deleteTransaction", async (req, res) => {
+// update transactions
+router.put("updateTransactions", async (req, res) => {
 
 })
 
-module.exports = router;
+
+// delete transactions
+router.delete("deleteTransactions", async (req, res) => {
+
+})
+
+module.exports = router();
