@@ -36,5 +36,27 @@ export class TransactionService {
             createdAt: formatDate,
             updatedAt: formatDate
         }]
+
+        sampleDate.forEach(transaction => {
+            this.transactions.set(transaction.id, transaction);
+        })   
+    }
+    
+    getAllTransactions(filter = {}){
+        const transactions = Array.from(this.transactions.values())
+        
+        // apply filters than apply sorting and than at the end pagination
+        // see what type is being used and than push it to the transactions array
+        if (filter.type){
+            transactions.filter(t => t.type === filter.type);
+        }
+
+        // see what category is being used and than push it to the transactions array
+        if (filter.category){
+            transactions.filter(t => t.category === filter.category);
+        }
+
+        const sortBy = filter.sortBy;
+        const order = filter.order;
     }
 }
