@@ -56,7 +56,20 @@ export class TransactionService {
             transactions.filter(t => t.category === filter.category);
         }
 
-        const sortBy = filter.sortBy;
-        const order = filter.order;
+        const sortBy = filter.sortBy || "date";
+        const order = filter.order || "desc";
+        
+        transactions.sort((a, b) => {
+            const valueOfA = a[sortBy];
+            const valueOfB = b[sortBy];
+            
+            if (typeof valueOfA === "string" && typeof valueOfB === "string") {
+                return order === "desc" ? valueOfA.localeCompare(valueOfB) : valueOfB.localeCompare(valueOfA);
+            }
+
+            if (typeof valueOfA === "number" && typeof valueOfB === "number") { 
+                return order === "desc" ? valueOfA - valueOfB : valueOfB - valueOfA;
+            }
+        })
     }
 }
