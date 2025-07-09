@@ -1,6 +1,8 @@
 
 const express = require("express");
 const { TransactionService } = require("../services/transactionServices");
+const { validateTransaction } = require("../middleware/validation");
+const { uuidv4 } = require("zod/v4");
 const router = express.Router();
 const formateDate = new Date().toISOString();
 const transactionServices = new TransactionService();;
@@ -69,7 +71,41 @@ router.get("/:id", async (req, res) => {
 
 // create transactions
 router.post("/createTransactions", async (req, res) => { 
+    try {
+    const validatedTransaction = validateTransaction(req.body);
+
+    if(!validatedTransaction){
+        return res.status(400).json({
+            success: false,
+            data: error.message,
+            details: validateTransaction.error?.message,
+            timeStamp: formateDate
+        })
+    }
+
+    const transactionData = {
+        id: uuidv4(),
+        ...validationResult.data,
+        createdAt: formateDate,
+        updatedAt: formateDate
+    }
+
+    const createNewTransaction = new transactionServices.createTransaction(transactionData);
     
+    res.status(200).json({
+        success: true,
+        data: createNewTransaction,
+        createdAt: formateDate,
+        updatedAt: formateDate,
+        message: "Transaction created successfully"
+    })
+    } catch(error){
+        res.status(500).json({
+            success: false,
+            error: "Internal server error" + error.message,
+            timeStamp: formateDate
+        })
+    }
 })
 
 // update transactions
