@@ -1,7 +1,7 @@
 
 const express = require("express");
 const { TransactionService } = require("../services/transactionServices");
-const { validateTransaction } = require("../middleware/validation");
+const { validateTransaction, validateUpdateTransaction } = require("../middleware/validation");
 const { uuidv4 } = require("zod/v4");
 const router = express.Router();
 const formateDate = new Date().toISOString();
@@ -110,13 +110,75 @@ router.post("/createTransactions", async (req, res) => {
 
 // update transactions
 router.put("updateTransactions", async (req, res) => {
+    try {
+    const updateTransaction = validateUpdateTransaction(req.body);
+    const { id } = req.params;
 
+    if (!validateTransaction){
+        res.status(401).json({
+            success: false,
+            data: error.message,
+            details: updateTransaction.error?.message,
+            timeStamp: formateDate
+        })
+    }
+
+    const updatedDataTransaction = new transactions.updateTransaction(id, updateTransaction);
+
+    if (!updatedDataTransaction){
+        res.status(404).json({
+            success: false,
+            error: `Transaction with ID:${id} not found`,
+            timeStamp: formateDate
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        data: updatedDataTransaction,
+        createdAt: formateDate,
+        updatedAt: formateDate,
+        message: "Transaction updated successfully"
+    })
+    } catch(error){
+        res.status(500).json({
+      success: false,
+      error: 'Internal Server Error',
+      message: error.message,
+      timestamp: formateDate
+    });
+    }
 })
 
 
 // delete transactions
 router.delete("deleteTransactions", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleted = transactionServices.deleteTransaction(id);
 
+    if (!deleted) {
+      return res.status(404).json({
+        success: false,
+        error: 'Not Found',
+        message: `Transaction with ID ${id} not found`,
+        timestamp: formateDate
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Transaction deleted successfully',
+      timestamp: formateDate
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'Internal Server Error',
+      message: error.message,
+      timestamp: formateDate
+    });
+  }  
 })
 
-module.exports = router();
+export {router as transactionRoutes} 
