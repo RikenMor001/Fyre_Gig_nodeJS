@@ -14,3 +14,18 @@ const createTransactions = (transactionData) => {
     transactionsArray.push(transactions);
     return transactions;
 }
+
+// GET all the transactions  
+const getAllTransactions = (transactionsArray) => {
+    return transactionsArray;
+}
+
+// GET transaction by ID
+const getTransactionById = ({id, transactionsArray}) => {
+    return transactionsArray.find(t => t.id === parseInt(id));
+}
+
+// UPDATE transactions 
+const updateTransactions = ({id, transactionsArray}) => {
+
+}
