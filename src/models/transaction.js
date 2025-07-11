@@ -21,7 +21,7 @@ const getAllTransactions = (transactionsArray) => {
 }
 
 // GET transaction by ID
-const getTransactionById = ({id, transactionsArray}) => {
+const getTransactionById = ({ id }) => {
     return transactionsArray.find(t => t.id === parseInt(id));
 }
 
