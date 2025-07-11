@@ -27,5 +27,30 @@ const getTransactionById = ({ id }) => {
 
 // UPDATE transactions 
 const updateTransactions = ({id, transactionsArray}) => {
+    const index = transactionsArray.findIndex(t => t.id === parseInt(id));
+    if (index !== -1){
+        transactionsArray[index] = { ...transactionsArray[index], ...updateData}
+        return transactionsArray[index]
+    }
+    return null;
+}
 
+// DELETE transactions 
+const deleteTransaction = ({id, transactionsArray}) => {
+    const deleteTransactionData = transactionsArray.findIndex(t => t.id === parseInt(id));
+
+    if (deleteTransactionData !== -1){
+        const deleteTransaction = transactionsArray[deleteTransactionData];
+        transactionsArray.splice(deleteTransactionData, 1);
+        return deleteTransaction
+    }
+    return null;
+}
+
+module.exports = {
+    createTransactions,
+    getAllTransactions, 
+    getTransactionById,
+    updateTransactions,
+    deleteTransaction
 }
