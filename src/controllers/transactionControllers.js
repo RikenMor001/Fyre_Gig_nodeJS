@@ -19,8 +19,11 @@ const transactionController = {
         error: 'Failed to retrieve transactions' 
       });
     }
-  }
+  },
 
+  getAllTransactionsById:(req, res) => {
+    
+  }
 
 }
 
