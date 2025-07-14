@@ -4,7 +4,7 @@ const { getAllTransactions, getTransactionById, updateTransactions, deleteTransa
 const { createTransactionSchema, updateTransactionSchema, idParamSchema, accountParamSchema, typeParamSchema } = require("../valdiationSchema/valdiationSchema");
 const router = express.Router();
 
-// Validation middleware function
+// Simple validation middleware
 const validateRequest = (schema, type = 'body') => {
     return (req, res, next) => {
         try {
@@ -13,23 +13,15 @@ const validateRequest = (schema, type = 'body') => {
                 data = req.body;
             } else if (type === 'params') {
                 data = req.params;
-            } else if (type === 'query') {
-                data = req.query;
             }
             
             schema.parse(data);
             next();
         } catch (error) {
-            if (error.name === 'ZodError') {
-                return res.status(400).json({
-                    message: 'Validation failed',
-                    errors: error.errors.map(err => ({
-                        field: err.path.join('.'),
-                        message: err.message
-                    }))
-                });
-            }
-            next(error);
+            return res.status(400).json({
+                message: 'Validation failed',
+                error: error.message
+            });
         }
     };
 };
@@ -90,18 +82,11 @@ router.get("/:id",
 router.post("/", 
     validateRequest(createTransactionSchema, 'body'),
     (req, res) => {
-        try {
-            const transaction = createTransactions(req.body);
-            res.status(201).json({
-                message: "Transaction created successfully",
-                transaction
-            });
-        } catch (error) {
-            res.status(400).json({
-                message: "Error creating transaction",
-                error: error.message
-            });
-        }
+        const transaction = createTransactions(req.body);
+        res.status(201).json({
+            message: "Transaction created successfully",
+            transaction
+        });
     }
 );
 
