@@ -9,7 +9,7 @@ const validationSchema = z.object({
     type: z.enum(["deposit", "withdrawl", "transfer"] , {
         errorMap: ({message: "Transaction type can only be deposit, withdrawl or transfer"})
     }),
-    balance: z.object.optional()
+    balance: z.number().optional()
 })
 
 // POST create a transaction 
@@ -35,9 +35,9 @@ const typeParamSchema = z.object({
 });
 
 module.exports = {
-    createTransactionSchema,
-    updateTransactionSchema,
-    idParamSchema,
-    accountParamSchema,
-    typeParamSchema
+  createTransactionSchema,
+  updateTransactionSchema,
+  idParamSchema,
+  accountParamSchema,
+  typeParamSchema
 }
