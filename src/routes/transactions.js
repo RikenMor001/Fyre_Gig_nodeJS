@@ -5,73 +5,68 @@ const router = express.Router();
 
 // GET all transactions
 router.get("/", (req, res) => {
-    const transaction = getAllTransactions();
-    if (!transaction){
-        res.status(402).json({
-            message: "Error fetching all transactions"
-        })
-    }
-    else res.status(200).json({
+    const transactions = getAllTransactions();
+    res.status(200).json({
         message: "All transactions fetched successfully",
-        transaction
-    })
-})
+        transactions
+    });
+});
 
 // GET transactions by ID
 router.get("/:id", (req, res) => {
-    const getAllTransactionsById = getTransactionById();
-    if (!getAllTransactionsById){
-        res.status(401).json({
-            message: "Error fetching the transaction"
-        })
+    const transaction = getTransactionById(req.params.id);
+    if (!transaction){
+        res.status(404).json({
+            message: "Transaction not found"
+        });
     }
-    else res.status(200).json({
-        message: "Transaction fetched",
-        getAllTransactionsById
-    })
-    
-})
+    else {
+        res.status(200).json({
+            message: "Transaction fetched successfully",
+            transaction
+        });
+    }
+});
 
 // POST create transactions
-router.post("createTransactions", (req, res) => {
-    const createTransaction = createTransactions();
-    if (!createTransaction){
-        res.status(404).json({
-            message: "Error creating a transaction"
-        })
-    }
-    else res.status(200).json({
+router.post("/", (req, res) => {
+    const transaction = createTransactions(req.body);
+    res.status(201).json({
         message: "Transaction created successfully",
-        createTransactions 
-    })
-})
+        transaction
+    });
+});
 
 // PUT update transaction
 router.put("/:id", (req, res) => {
-    const updateTransaction = updateTransactions(req,params.id, req.body);
+    const updateTransaction = updateTransactions(req.params.id, req.body);
     if (!updateTransaction){
-        res.status(403).json({
-            message: "Failed to update the transaction"
-        })
+        res.status(404).json({
+            message: "Transaction not found"
+        });
     }
-    else res.status(200).json({
-        message: "Transaction updated successfully",
-        updateTransaction
-    })
-})
+    else {
+        res.status(200).json({
+            message: "Transaction updated successfully",
+            updateTransaction
+        });
+    }
+});
 
 // DELETE transaction 
 router.delete("/:id", (req, res) => {
-    const transactionDelete = deleteTransaction();
-    if (!transactionDelete){
-        res.status(405).json({
-            message: "Error deleting the transaction"
-        })
+    const deletedTransaction = deleteTransaction(req.params.id);
+    if (!deletedTransaction){
+        res.status(404).json({
+            message: "Transaction not found"
+        });
     }
-    else res.status(200).json({
-        message: "Successfuly deleted the transaction",
-        transactionDelete
-    })
-})
+    else {
+        res.status(200).json({
+            message: "Successfully deleted the transaction",
+            deletedTransaction
+        });
+    }
+});
 
 module.exports = router;
