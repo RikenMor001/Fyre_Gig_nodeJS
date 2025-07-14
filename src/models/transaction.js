@@ -3,29 +3,28 @@ let transactionsArray = [];
 let nextId = 1;
 
 // CREATE transactions
-const formatDate = new Date().toISOString();
 const createTransactions = (transactionData) => {
     const transactions = {
         id: nextId++,
         ...transactionData,
-        createdAt: formatDate
+        createdAt: new Date().toISOString()
     }
     transactionsArray.push(transactions);
     return transactions;
 }
 
 // GET all the transactions  
-const getAllTransactions = (transactionsArray) => {
+const getAllTransactions = () => {
     return transactionsArray;
 }
 
 // GET transaction by ID
-const getTransactionById = ({ id }) => {
+const getTransactionById = (id) => {
     return transactionsArray.find(t => t.id === parseInt(id));
 }
 
 // UPDATE transactions 
-const updateTransactions = ({id, transactionsArray}) => {
+const updateTransactions = (id, updateData) => {
     const index = transactionsArray.findIndex(t => t.id === parseInt(id));
     if (index !== -1){
         transactionsArray[index] = { ...transactionsArray[index], ...updateData}
@@ -35,7 +34,7 @@ const updateTransactions = ({id, transactionsArray}) => {
 }
 
 // DELETE transactions 
-const deleteTransaction = ({id, transactionsArray}) => {
+const deleteTransaction = (id) => {
     const deleteTransactionData = transactionsArray.findIndex(t => t.id === parseInt(id));
 
     if (deleteTransactionData !== -1){
