@@ -25,4 +25,3 @@ const validationSchema = (schema) => {
 }
 
 module.exports = { validationSchema };
-
