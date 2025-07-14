@@ -17,8 +17,8 @@ const createTransactionSchema = validationSchema;
 
 // PUT update a transaction
 const updateTransactionSchema = z.object({
-    descritpion: z.object.optional(),
-    status: z.enum(["completed", "pending", "failed"]).optional() 
+  descritpion: z.string().optional(),
+  status: z.enum(["completed", "pending", "failed"]).optional() 
 })
 
 // ID parameter validation
