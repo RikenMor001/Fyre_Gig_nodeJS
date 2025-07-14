@@ -20,3 +20,24 @@ const updateTransactionSchema = z.object({
     descritpion: z.object.optional(),
     status: z.enum(["completed", "pending", "failed"]).optional() 
 })
+
+// ID parameter validation
+const idParamSchema = z.object({
+  id: z.string().regex(/^\d+$/, 'ID must be a number').transform(Number)
+});
+
+const accountParamSchema = z.object({
+  accountNumber: z.string().min(1, 'Account number is required')
+});
+
+const typeParamSchema = z.object({
+  type: z.enum(['deposit', 'withdrawal', 'transfer'])
+});
+
+module.exports = {
+    createTransactionSchema,
+    updateTransactionSchema,
+    idParamSchema,
+    accountParamSchema,
+    typeParamSchema
+}
