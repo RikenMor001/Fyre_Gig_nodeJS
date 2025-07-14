@@ -23,6 +23,16 @@ const getTransactionById = (id) => {
     return transactionsArray.find(t => t.id === parseInt(id));
 }
 
+// GET transactions by account number
+const getTransactionsByAccount = (accountNumber) => {
+    return transactionsArray.filter(t => t.accountNumber === accountNumber);
+}
+
+// GET transactions by type
+const getTransactionsByType = (type) => {
+    return transactionsArray.filter(t => t.type === type);
+}
+
 // UPDATE transactions 
 const updateTransactions = (id, updateData) => {
     const index = transactionsArray.findIndex(t => t.id === parseInt(id));
@@ -49,6 +59,8 @@ module.exports = {
     createTransactions,
     getAllTransactions, 
     getTransactionById,
+    getTransactionsByAccount,
+    getTransactionsByType,
     updateTransactions,
     deleteTransaction
 }
